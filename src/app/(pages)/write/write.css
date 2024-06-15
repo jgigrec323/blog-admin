@@ -1,0 +1,14 @@
+/* Write.css */
+
+.ql-container {
+  font-size: 1.5rem !important;
+}
+
+.ql-toolbar.ql-snow {
+  position: relative;
+  background: white;
+}
+
+.ql-container.ql-snow {
+  overflow: auto;
+}

@@ -15,8 +15,8 @@ function Sidebar() {
     { path: "/tags", label: "Tags" },
   ];
   return (
-    <div className="px-4 py-10 border-r-2 w-52 flex flex-col justify-between min-w-56 min-h-screen">
-      <div className="flex flex-col gap-10">
+    <div className="fixed bg-white px-4 py-10 border-r-2  flex flex-col justify-between min-w-56 min-h-screen">
+      <div className="flex flex-col gap-12">
         <Logo></Logo>
         <ul>
           {links.map((link) => (
@@ -24,7 +24,7 @@ function Sidebar() {
               <Link
                 className={`${
                   currentPath === link.path && "bg-gray-200"
-                } block p-2 hover:bg-gray-200 rounded mb-1`}
+                } block p-2 hover:bg-gray-200 rounded mb-1 text-lg`}
                 href={link.path}
               >
                 {link.label}
