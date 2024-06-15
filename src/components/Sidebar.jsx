@@ -15,7 +15,7 @@ function Sidebar() {
     { path: "/tags", label: "Tags" },
   ];
   return (
-    <div className="px-4 py-10 border-r-2 w-52 flex flex-col justify-between min-h-screen">
+    <div className="px-4 py-10 border-r-2 w-52 flex flex-col justify-between min-w-56 min-h-screen">
       <div className="flex flex-col gap-10">
         <Logo></Logo>
         <ul>

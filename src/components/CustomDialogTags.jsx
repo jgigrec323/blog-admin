@@ -16,11 +16,12 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export function CustomDialogCategories({ children }) {
+export function CustomDialogTags({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [categories, setCategories] = useState("");
+  const [tags, setTags] = useState("");
   const { onAdd, setOnAdd } = useAppContext();
+
   const notify = (msg, isSuccess) =>
     isSuccess === true ? toast.success(msg) : toast.error(msg);
 
@@ -28,11 +29,11 @@ export function CustomDialogCategories({ children }) {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!categories) {
-      notify("Enter at least one category", false);
+    if (!tags) {
+      notify("Enter at least one tag", false);
       return;
     }
-    const response = await axios.post("/api/category", { categories });
+    const response = await axios.post("/api/tag", { tags });
     if (response.statusText !== "OK") {
       notify(response.data.message, false);
     }
@@ -46,21 +47,21 @@ export function CustomDialogCategories({ children }) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add categories</DialogTitle>
+          <DialogTitle>Add Tags</DialogTitle>
           <DialogDescription>
-            In order to add multiple categories, separate them by commmas
+            In order to add multiple tags, separate them by commmas
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-2">
-            <Label htmlFor="name">Categories</Label>
+            <Label htmlFor="name">Tags</Label>
             <Input
               id="name"
-              placeholder="Science, Sports, ..."
+              placeholder="Nouveau, actu, ..."
               className="col-span-3"
-              value={categories}
+              value={tags}
               onChange={(e) => {
-                setCategories(e.target.value);
+                setTags(e.target.value);
               }}
             />
           </div>
