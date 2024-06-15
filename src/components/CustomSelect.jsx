@@ -12,6 +12,7 @@ function CustomSelect({
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  //TODO:need to get the categories and tags
   useEffect(() => {
     const fetchItems = async () => {
       try {
