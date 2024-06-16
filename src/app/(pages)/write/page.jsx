@@ -64,16 +64,9 @@ function Write() {
           <div className="flex gap-5">
             <CustomSelect
               endpoint="category"
-              selectedItems={selectedCategories}
-              setSelectedItems={setSelectedCategories}
               placeholder="Select categories..."
             />
-            <CustomSelect
-              endpoint="tag"
-              selectedItems={selectedTags}
-              setSelectedItems={setSelectedTags}
-              placeholder="Select tags..."
-            />
+            <CustomSelect endpoint="tag" placeholder="Select tags..." />
           </div>
         </div>
         <div className="w-full ">

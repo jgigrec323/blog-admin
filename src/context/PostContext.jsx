@@ -18,8 +18,45 @@ export const PostProvider = ({ children }) => {
     setPost((prevPost) => ({ ...prevPost, ...updates }));
   };
 
+  const addCategory = (categoryId) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      categoryIds: [...prevPost.categoryIds, categoryId],
+    }));
+  };
+
+  const removeCategory = (categoryId) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      categoryIds: prevPost.categoryIds.filter((id) => id !== categoryId),
+    }));
+  };
+
+  const addTag = (tagId) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      tagIds: [...prevPost.tagIds, tagId],
+    }));
+  };
+
+  const removeTag = (tagId) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      tagIds: prevPost.tagIds.filter((id) => id !== tagId),
+    }));
+  };
+
   return (
-    <PostContext.Provider value={{ post, updatePost }}>
+    <PostContext.Provider
+      value={{
+        post,
+        updatePost,
+        addCategory,
+        removeCategory,
+        addTag,
+        removeTag,
+      }}
+    >
       {children}
     </PostContext.Provider>
   );
