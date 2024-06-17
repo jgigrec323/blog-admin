@@ -4,6 +4,26 @@ import { getAuth } from "@clerk/nextjs/server";
 
 const prisma = new PrismaClient();
 
+export async function GET() {
+  try {
+    const posts = await prisma.post.findMany({
+      include: {
+        categories: true, // Include related categories
+        tags: true, // Include related tags
+        images: true, // Include related images
+      },
+    });
+
+    return NextResponse.json({
+      message: "Posts fetched",
+      posts,
+    });
+  } catch (error) {
+    console.log("[POST_GET]:", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
 export async function POST(request) {
   try {
     // Verify the user's authentication

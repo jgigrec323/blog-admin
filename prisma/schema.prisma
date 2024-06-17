@@ -10,7 +10,7 @@ datasource db {
 model Post {
   id         Int        @id @default(autoincrement())
   title      String
-  content    String
+  content    String     @db.LongText
   published  Boolean    @default(false)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -34,7 +34,7 @@ model Tag {
 
 model Comment {
   id        Int      @id @default(autoincrement())
-  content   String
+  content   String   @db.Text
   createdAt DateTime @default(now())
   postId    Int
   post      Post     @relation(fields: [postId], references: [id])
