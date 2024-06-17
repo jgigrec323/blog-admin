@@ -9,6 +9,7 @@ import "react-quill/dist/quill.snow.css";
 import "./write.css";
 import CustomSelect from "@/components/CustomSelect";
 import { usePost } from "@/context/PostContext";
+import ImageUpload from "@/components/ImageUpload";
 
 function Write() {
   const [open, setOpen] = useState(false);
@@ -48,7 +49,7 @@ function Write() {
           value={post.title}
           onChange={(e) => updatePost({ title: e.target.value })}
         />
-        <div className="my-5 flex gap-10">
+        <div className="my-5 flex items-center gap-10">
           <IoIosAddCircleOutline
             size={30}
             onClick={() => {
@@ -56,8 +57,8 @@ function Write() {
             }}
           />
           {open && (
-            <div className="flex gap-5">
-              <FaRegImage size={25} />
+            <div className="flex gap-5 items-center">
+              <ImageUpload></ImageUpload>
               <BiSolidVideos size={25} />
             </div>
           )}

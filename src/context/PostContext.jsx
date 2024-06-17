@@ -45,6 +45,12 @@ export const PostProvider = ({ children }) => {
       tagIds: prevPost.tagIds.filter((id) => id !== tagId),
     }));
   };
+  const addImage = (url) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      imageUrls: [...prevPost.imageUrls, url],
+    }));
+  };
 
   return (
     <PostContext.Provider
@@ -55,6 +61,7 @@ export const PostProvider = ({ children }) => {
         removeCategory,
         addTag,
         removeTag,
+        addImage,
       }}
     >
       {children}
