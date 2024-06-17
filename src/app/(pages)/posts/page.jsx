@@ -1,18 +1,26 @@
 "use client";
-import DataTable from "@/components/DataTable";
-import Title from "@/components/Title";
-import { useAppContext } from "@/context/AppContext";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { toast } from "sonner";
+import Title from "@/components/Title";
+import DataTable from "@/components/DataTable";
+import { useAppContext } from "@/context/AppContext";
 import { MdModeEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-
+import { Select } from "@/components/ui/select";
+import CustomSelectSingle from "@/components/CustomSelectSingle";
+import { Input } from "@/components/ui/input";
+import CustomLoader from "@/components/CustomLoader";
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [filterType, setFilterType] = useState("title");
+  const [filterValue, setFilterValue] = useState("");
   const { onAdd, setOnAdd } = useAppContext();
+
   const notify = (msg, isSuccess) =>
     isSuccess === true ? toast.success(msg) : toast.error(msg);
 
@@ -25,9 +33,8 @@ function Posts() {
           return;
         }
         setPosts(response.data.posts);
-        console.log(response.data.posts);
-        notify(response.data.message, true);
         setIsLoading(false);
+        notify(response.data.message, true);
       } catch (error) {
         console.error("Error fetching posts:", error);
         notify("Failed to fetch posts", false);
@@ -36,6 +43,43 @@ function Posts() {
     };
     fetchPosts();
   }, [onAdd]);
+
+  const handleFilterTypeChange = (option) => {
+    setFilterType(option);
+    setFilterValue(""); // Reset filter value when filter type changes
+    setCurrentPage(1); // Reset to first page when filter changes
+  };
+
+  const handleFilterValueChange = (e) => {
+    setFilterValue(e.target.value);
+    setCurrentPage(1); // Reset to first page when filter changes
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const filteredPosts = posts.filter((post) => {
+    if (filterType === "title") {
+      return post.title.toLowerCase().includes(filterValue.toLowerCase());
+    } else if (filterType === "content") {
+      return post.content.toLowerCase().includes(filterValue.toLowerCase());
+    } else if (filterType === "categories") {
+      return post.categories.some((category) =>
+        category.name.toLowerCase().includes(filterValue.toLowerCase())
+      );
+    } else if (filterType === "tags") {
+      return post.tags.some((tag) =>
+        tag.name.toLowerCase().includes(filterValue.toLowerCase())
+      );
+    }
+    return true;
+  });
+
+  const paginatedPosts = filteredPosts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const columns = [
     { title: "ID", key: "id" },
@@ -58,29 +102,55 @@ function Posts() {
       custom: (post) => post.tags.map((tag) => tag.name).join(", "),
     },
     {
+      title: "Image",
+      key: "images",
+      custom: (post) =>
+        post.images.length > 0 ? (
+          <img src={post.images[0].url} alt={post.title} width="100" />
+        ) : (
+          "No Image"
+        ),
+    },
+    {
       title: "Actions",
       key: "actions",
-      custom: () => {
-        return (
-          <div className="flex items-center gap-2">
-            <FaEye size={22} />
-            <MdModeEdit size={22} />
-            <MdDelete size={22} className="text-red-500" />
-          </div>
-        );
-      },
+      custom: (post) => (
+        <div className="flex items-center gap-2">
+          <FaEye size={22} />
+          <MdModeEdit size={22} />
+          <MdDelete size={22} className="text-red-500" />
+        </div>
+      ),
     },
   ];
 
   return (
     <div>
       <Title>Posts</Title>
-      <div className="relative" style={{ height: `calc(100vh - 15rem)` }}>
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : (
-          <DataTable data={posts} columns={columns} />
-        )}
+      <div className="flex items-center gap-2 mt-5 mb-2">
+        <CustomSelectSingle
+          value={filterType}
+          placeholder={"Select a filter"}
+          options={["title", "content", "categories", "tags"]}
+          onChange={handleFilterTypeChange}
+        ></CustomSelectSingle>
+        <Input
+          value={filterValue}
+          type="text"
+          onChange={handleFilterValueChange}
+          placeholder={`Filter by ${filterType}`}
+        ></Input>
+      </div>
+      <div className="relative">
+        {isLoading && <CustomLoader></CustomLoader>}
+        <DataTable
+          data={paginatedPosts}
+          columns={columns}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          totalItems={filteredPosts.length}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

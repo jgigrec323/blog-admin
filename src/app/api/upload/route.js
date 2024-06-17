@@ -36,7 +36,7 @@ export const POST = async (req, res) => {
     await fsPromises.writeFile(filePath, buffer);
 
     // Return a success response with the image URL
-    const imageUrl = `/uploads/${filename}`; // Construct the image URL relative to the root directory
+    const imageUrl = `/uploads/${timestamp}-${filename}`; // Construct the image URL relative to the root directory
     return NextResponse.json({
       message: "Image uploaded successfully!",
       imageUrl,
