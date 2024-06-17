@@ -13,6 +13,7 @@ import ImageUpload from "@/components/ImageUpload";
 
 function Write() {
   const [open, setOpen] = useState(false);
+  const [imgOpen, setImgOpen] = useState(false);
   const [value, setValue] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -58,7 +59,12 @@ function Write() {
           />
           {open && (
             <div className="flex gap-5 items-center">
-              <ImageUpload></ImageUpload>
+              <FaRegImage
+                onClick={() => {
+                  setImgOpen(!imgOpen);
+                }}
+              ></FaRegImage>
+              {imgOpen && <ImageUpload></ImageUpload>}
               <BiSolidVideos size={25} />
             </div>
           )}

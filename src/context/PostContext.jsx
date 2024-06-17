@@ -51,6 +51,16 @@ export const PostProvider = ({ children }) => {
       imageUrls: [...prevPost.imageUrls, url],
     }));
   };
+  const clearPost = () => {
+    setPost({
+      title: "",
+      content: "",
+      categoryIds: [],
+      tagIds: [],
+      imageUrls: [],
+      published: false,
+    });
+  };
 
   return (
     <PostContext.Provider
@@ -62,6 +72,7 @@ export const PostProvider = ({ children }) => {
         addTag,
         removeTag,
         addImage,
+        clearPost,
       }}
     >
       {children}

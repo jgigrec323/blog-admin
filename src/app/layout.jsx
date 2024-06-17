@@ -14,7 +14,12 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <body className="flex">
-          <Toaster expand={false} position="top-right" richColors />
+          <Toaster
+            expand={false}
+            duration={1000}
+            position="top-right"
+            richColors
+          />
           <AppProvider>
             <Sidebar></Sidebar>
             <PostProvider>

@@ -33,7 +33,6 @@ const ImageUpload = () => {
       if (response.status === 200) {
         toast.success("Image uploaded successfully");
         addImage(response.data.imageUrl);
-        console.log(response.data); // Assuming response contains imageUrl
       } else {
         toast.error("Failed to upload image");
       }
