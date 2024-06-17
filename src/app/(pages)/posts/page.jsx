@@ -5,6 +5,9 @@ import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { MdModeEdit } from "react-icons/md";
+import { FaEye } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -55,17 +58,17 @@ function Posts() {
       custom: (post) => post.tags.map((tag) => tag.name).join(", "),
     },
     {
-      title: "Images",
-      key: "images",
-      custom: (post) =>
-        post.images.map((image) => (
-          <img
-            key={image.id}
-            src={image.url}
-            alt={`Image for post ${post.id}`}
-            width="100"
-          />
-        )),
+      title: "Actions",
+      key: "actions",
+      custom: () => {
+        return (
+          <div className="flex items-center gap-2">
+            <FaEye size={22} />
+            <MdModeEdit size={22} />
+            <MdDelete size={22} className="text-red-500" />
+          </div>
+        );
+      },
     },
   ];
 
