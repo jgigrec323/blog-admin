@@ -83,7 +83,7 @@ function Posts() {
   };
 
   const handleView = (id) => {
-    router.push(`/view/${id}`);
+    router.push(`/write/${id}/view`);
   };
 
   const filteredPosts = posts.filter((post) => {

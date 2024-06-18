@@ -9,12 +9,14 @@ import { usePost } from "@/context/PostContext";
 import { toast } from "sonner";
 import axios from "axios";
 import CustomLoader from "@/components/CustomLoader";
+import { CustomAlertDialog } from "@/components/CustomAlertDialog";
 
 function MainPagesLayout({ children }) {
   const currentPath = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { post, clearPost } = usePost();
+  const [posts, setPosts] = useState([]);
 
   const handlePublish = async () => {
     try {
@@ -51,7 +53,20 @@ function MainPagesLayout({ children }) {
       setIsLoading(false);
     }
   };
-
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`/api/posts/${id}`);
+      if (response.status === 200) {
+        toast.success("Post deleted successfully");
+        router.push("/posts");
+      } else {
+        toast.error("Failed to delete post");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      toast.error("Failed to delete post");
+    }
+  };
   const renderButton = () => {
     switch (currentPath) {
       case "/categories":
@@ -131,6 +146,29 @@ function MainPagesLayout({ children }) {
               >
                 Save
               </Button>
+            </>
+          );
+        } else if (currentPath.match(/^\/write\/\d+\/view$/)) {
+          const id = parseInt(currentPath.split("/")[2]);
+          return (
+            <>
+              <Button
+                onClick={() => router.back()}
+                className="mr-2 bg-black text-white"
+              >
+                Back
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push(`/write/${id}/edit`);
+                }}
+                className="mr-2 bg-green-700 text-white"
+              >
+                Edit
+              </Button>
+              <CustomAlertDialog id={id} handleDelete={handleDelete}>
+                <Button variant="destructive">Delete</Button>
+              </CustomAlertDialog>
             </>
           );
         }

@@ -18,8 +18,6 @@ function Edit({ params }) {
   const [open, setOpen] = useState(false);
   const [imgOpen, setImgOpen] = useState(false);
   const [value, setValue] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
   const { post, setPost, updatePost } = usePost();
 
   useEffect(() => {
