@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import { promises as fsPromises } from "fs";
-
+import { getAuth } from "@clerk/nextjs/server";
 // Define the POST handler for the file upload
 export const POST = async (req, res) => {
+  // Verify the user's authentication
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   // Parse the incoming form data
   const formData = await req.formData();
 

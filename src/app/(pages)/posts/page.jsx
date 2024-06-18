@@ -12,6 +12,8 @@ import { Select } from "@/components/ui/select";
 import CustomSelectSingle from "@/components/CustomSelectSingle";
 import { Input } from "@/components/ui/input";
 import CustomLoader from "@/components/CustomLoader";
+import Image from "next/image";
+import { CustomAlertDialog } from "@/components/CustomAlertDialog";
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,6 +59,29 @@ function Posts() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`/api/posts/${id}`);
+      if (response.status === 200) {
+        notify("Post deleted successfully", true);
+        setPosts(posts.filter((post) => post.id !== id));
+      } else {
+        notify("Failed to delete post", false);
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      notify("Failed to delete post", false);
+    }
+  };
+
+  const handleEdit = (id) => {
+    router.push(`/write/${id}`);
+  };
+
+  const handleView = (id) => {
+    router.push(`/view/${id}`);
   };
 
   const filteredPosts = posts.filter((post) => {
@@ -106,7 +131,12 @@ function Posts() {
       key: "images",
       custom: (post) =>
         post.images.length > 0 ? (
-          <img src={post.images[0].url} alt={post.title} width="100" />
+          <Image
+            src={post.images[0].url}
+            alt={post.title}
+            width={100}
+            height={100}
+          />
         ) : (
           "No Image"
         ),
@@ -118,7 +148,9 @@ function Posts() {
         <div className="flex items-center gap-2">
           <FaEye size={22} />
           <MdModeEdit size={22} />
-          <MdDelete size={22} className="text-red-500" />
+          <CustomAlertDialog id={post.id} handleDelete={handleDelete}>
+            <MdDelete size={22} className="text-red-500" />
+          </CustomAlertDialog>
         </div>
       ),
     },
