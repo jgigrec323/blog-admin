@@ -66,6 +66,7 @@ export const PostProvider = ({ children }) => {
     <PostContext.Provider
       value={{
         post,
+        setPost,
         updatePost,
         addCategory,
         removeCategory,

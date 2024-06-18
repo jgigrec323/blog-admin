@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import CustomLoader from "@/components/CustomLoader";
 import Image from "next/image";
 import { CustomAlertDialog } from "@/components/CustomAlertDialog";
+import { useRouter } from "next/navigation";
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,10 +23,11 @@ function Posts() {
   const [filterType, setFilterType] = useState("title");
   const [filterValue, setFilterValue] = useState("");
   const { onAdd, setOnAdd } = useAppContext();
+  const router = useRouter();
 
   const notify = (msg, isSuccess) =>
     isSuccess === true ? toast.success(msg) : toast.error(msg);
-
+  //TODO:AFFICHER BTNS PAGINATION SI ON A 10 & LIMITER LE NOMBRE DE TRUC DANS CONTENT
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -77,7 +79,7 @@ function Posts() {
   };
 
   const handleEdit = (id) => {
-    router.push(`/write/${id}`);
+    router.push(`/write/${id}/edit`);
   };
 
   const handleView = (id) => {
@@ -146,10 +148,18 @@ function Posts() {
       key: "actions",
       custom: (post) => (
         <div className="flex items-center gap-2">
-          <FaEye size={22} />
-          <MdModeEdit size={22} />
+          <FaEye
+            size={22}
+            className="cursor-pointer"
+            onClick={() => handleView(post.id)}
+          />
+          <MdModeEdit
+            size={22}
+            className="cursor-pointer"
+            onClick={() => handleEdit(post.id)}
+          />
           <CustomAlertDialog id={post.id} handleDelete={handleDelete}>
-            <MdDelete size={22} className="text-red-500" />
+            <MdDelete size={22} className="text-red-500 cursor-pointer" />
           </CustomAlertDialog>
         </div>
       ),

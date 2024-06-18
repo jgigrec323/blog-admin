@@ -33,6 +33,24 @@ function MainPagesLayout({ children }) {
       setIsLoading(false);
     }
   };
+  const handleEdit = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.put(`/api/posts/${id}`, post);
+      if (response.status === 200) {
+        toast.success("Post updated successfully");
+        clearPost();
+        router.back();
+      } else {
+        toast.error(response.data.error || "Failed to update post");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred while updating the post");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const renderButton = () => {
     switch (currentPath) {
@@ -80,6 +98,7 @@ function MainPagesLayout({ children }) {
             </Button>
           </>
         );
+
       case "/":
         return (
           <Button
@@ -93,6 +112,28 @@ function MainPagesLayout({ children }) {
           </Button>
         );
       default:
+        if (currentPath.match(/^\/write\/\d+\/edit$/)) {
+          const id = parseInt(currentPath.split("/")[2]);
+
+          return (
+            <>
+              <Button
+                onClick={() => router.back()}
+                className="mr-2 bg-black text-white"
+              >
+                Back
+              </Button>
+              <Button
+                onClick={() => {
+                  handleEdit(id);
+                }}
+                className="bg-green-700 text-white"
+              >
+                Save
+              </Button>
+            </>
+          );
+        }
         return (
           <Button
             onClick={() => {
