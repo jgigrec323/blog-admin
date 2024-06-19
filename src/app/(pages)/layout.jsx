@@ -103,7 +103,10 @@ function MainPagesLayout({ children }) {
         return (
           <>
             <Button
-              onClick={() => router.back()}
+              onClick={() => {
+                clearPost();
+                router.back();
+              }}
               className="mr-2 bg-black text-white"
             >
               Back
@@ -133,7 +136,10 @@ function MainPagesLayout({ children }) {
           return (
             <>
               <Button
-                onClick={() => router.back()}
+                onClick={() => {
+                  clearPost();
+                  router.back();
+                }}
                 className="mr-2 bg-black text-white"
               >
                 Back

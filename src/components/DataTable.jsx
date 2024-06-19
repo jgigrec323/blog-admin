@@ -50,17 +50,20 @@ function DataTable({
           ))}
         </TableBody>
       </Table>
-      <div className="flex justify-start gap-2 mt-5">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <Button
-            key={index}
-            onClick={() => onPageChange(index + 1)}
-            disabled={currentPage === index + 1}
-          >
-            {index + 1}
-          </Button>
-        ))}
-      </div>
+
+      {totalItems > 10 && (
+        <div className="flex justify-start gap-2 mt-5">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Button
+              key={index}
+              onClick={() => onPageChange(index + 1)}
+              disabled={currentPage === index + 1}
+            >
+              {index + 1}
+            </Button>
+          ))}
+        </div>
+      )}
     </>
   );
 }

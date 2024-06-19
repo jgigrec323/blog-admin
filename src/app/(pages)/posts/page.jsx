@@ -111,7 +111,29 @@ function Posts() {
   const columns = [
     { title: "ID", key: "id" },
     { title: "Title", key: "title" },
-    { title: "Content", key: "content", width: 400 },
+    {
+      title: "Content",
+      key: "content",
+      width: 400,
+      custom: (post) => {
+        const content = post.content;
+        const maxCharLength = 300; // Adjust the maximum character length as needed
+
+        if (content.length <= maxCharLength) {
+          return content;
+        }
+
+        // Truncate content with an ellipsis for longer content
+        const truncatedContent = `${content.substring(0, maxCharLength)}...`;
+
+        // Optionally, display a tooltip with the full content on hover
+        return (
+          <div title={content} className="cursor-pointer">
+            {truncatedContent}
+          </div>
+        );
+      },
+    },
     {
       title: "Created At",
       key: "createdAt",
