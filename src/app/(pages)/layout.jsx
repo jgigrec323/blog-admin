@@ -10,12 +10,15 @@ import { toast } from "sonner";
 import axios from "axios";
 import CustomLoader from "@/components/CustomLoader";
 import { CustomAlertDialog } from "@/components/CustomAlertDialog";
+import { MdDelete } from "react-icons/md";
+import { useAppContext } from "@/context/AppContext";
 
 function MainPagesLayout({ children }) {
   const currentPath = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { post, clearPost } = usePost();
+  const { onAdd, setOnAdd } = useAppContext();
   const [posts, setPosts] = useState([]);
 
   const handlePublish = async () => {
@@ -67,6 +70,20 @@ function MainPagesLayout({ children }) {
       toast.error("Failed to delete post");
     }
   };
+  const handleDeleteAll = async (id) => {
+    try {
+      const response = await axios.delete(`/api/posts`);
+      if (response.status === 200) {
+        toast.success("Post deleted successfully");
+        setOnAdd(!onAdd);
+      } else {
+        toast.error("Failed to delete post");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      toast.error("Failed to delete post");
+    }
+  };
   const renderButton = () => {
     switch (currentPath) {
       case "/categories":
@@ -89,15 +106,20 @@ function MainPagesLayout({ children }) {
         );
       case "/posts":
         return (
-          <Button
-            onClick={() => {
-              router.push("/write");
-            }}
-            variant="outline"
-          >
-            <IoIosAdd size={22} className="mr-1" />
-            New Post
-          </Button>
+          <>
+            <CustomAlertDialog id={0} handleDelete={handleDeleteAll}>
+              <Button variant="destructive">Delete all</Button>
+            </CustomAlertDialog>
+            <Button
+              className=" ml-2 bg-black text-white"
+              onClick={() => {
+                router.push("/write");
+              }}
+            >
+              <IoIosAdd size={22} className="mr-1" />
+              New Post
+            </Button>
+          </>
         );
       case "/write":
         return (

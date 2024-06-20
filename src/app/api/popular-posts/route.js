@@ -15,7 +15,7 @@ export async function GET(request) {
       orderBy: {
         views: "desc",
       },
-      take: 5,
+      take: 3,
       include: {
         categories: true,
         tags: true,

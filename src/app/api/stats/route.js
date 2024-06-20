@@ -10,7 +10,7 @@ export async function GET(request) {
     if (!userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-
+    const totalPosts = await prisma.post.count();
     const totalComments = await prisma.comment.count();
     const totalShares = await prisma.post.aggregate({
       _sum: {
@@ -25,6 +25,7 @@ export async function GET(request) {
 
     return NextResponse.json({
       totalComments,
+      totalPosts,
       totalShares: totalShares._sum.shares,
       totalViews: totalViews._sum.views,
     });

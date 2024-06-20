@@ -22,7 +22,7 @@ function CustomCard({ number, title, analytic }) {
       <CardTitle className=" mb-2">{formatNumber(number)}</CardTitle>
       <div className="flex justify-between">
         <p>{title}</p>
-        <div>{analytic}</div>
+        {analytic && <div className="bg-[#dbf2f2] p-1">{analytic}</div>}
       </div>
     </Card>
   );

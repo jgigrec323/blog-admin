@@ -28,7 +28,7 @@ function Sidebar() {
                 variant="outline"
                 className={`${
                   currentPath === link.path && "bg-black text-white"
-                } block p-2 rounded mb-1 text-lg`}
+                } block py-2 px-4 rounded mb-1 text-lg`}
                 href={link.path}
               >
                 {link.label}

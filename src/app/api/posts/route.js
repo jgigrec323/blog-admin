@@ -65,3 +65,19 @@ export async function POST(request) {
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
+export async function DELETE(request) {
+  try {
+    const { userId } = getAuth(request);
+
+    if (!userId) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    await prisma.image.deleteMany();
+    await prisma.post.deleteMany();
+
+    return NextResponse.json({ message: "All posts deleted successfully" });
+  } catch (error) {
+    console.log("[POST_DELETE]:", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
