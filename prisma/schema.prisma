@@ -17,7 +17,9 @@ model Post {
   categories Category[]
   tags       Tag[]
   comments   Comment[]
-  images     Image[] // Adding images relation to the Post model
+  images     Image[]
+  views      Int        @default(0)
+  shares     Int        @default(0)
 }
 
 model Category {

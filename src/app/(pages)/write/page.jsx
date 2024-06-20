@@ -1,6 +1,6 @@
 "use client";
 import Title from "@/components/Title";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaRegImage } from "react-icons/fa6";
 import { BiSolidVideos } from "react-icons/bi";
@@ -17,7 +17,7 @@ function Write() {
   const [value, setValue] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const { post, updatePost } = usePost();
+  const { post, updatePost, setPost } = usePost();
 
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
@@ -40,6 +40,16 @@ function Write() {
     toolbar: toolbarOptions,
   };
 
+  useEffect(() => {
+    setPost({
+      title: "",
+      content: "",
+      categoryIds: [],
+      tagIds: [],
+      imageUrls: [],
+      published: false,
+    });
+  }, [setPost]);
   return (
     <div>
       <div className="mt-10 relative">

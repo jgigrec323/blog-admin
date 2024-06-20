@@ -3,10 +3,13 @@ import Link from "next/link";
 import React from "react";
 import Logo from "./Logo";
 import { UserButton } from "@clerk/nextjs";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "./ui/button";
+import { IoIosAdd } from "react-icons/io";
 
 function Sidebar() {
   const currentPath = usePathname();
+  const router = useRouter();
 
   const links = [
     { path: "/", label: "Dashboard" },
@@ -22,9 +25,10 @@ function Sidebar() {
           {links.map((link) => (
             <li key={link.path}>
               <Link
+                variant="outline"
                 className={`${
-                  currentPath === link.path && "bg-gray-200"
-                } block p-2 hover:bg-gray-200 rounded mb-1 text-lg`}
+                  currentPath === link.path && "bg-black text-white"
+                } block p-2 rounded mb-1 text-lg`}
                 href={link.path}
               >
                 {link.label}
@@ -33,7 +37,18 @@ function Sidebar() {
           ))}
         </ul>
       </div>
-      <UserButton afterSignOutUrl="/sign-in" />
+      <div className="flex justify-between">
+        <UserButton afterSignOutUrl="/sign-in" />
+        <Button
+          onClick={() => {
+            router.push("/write");
+          }}
+          className="bg-black text-white"
+        >
+          <IoIosAdd size={22} className="mr-1" />
+          New Post
+        </Button>
+      </div>
     </div>
   );
 }
