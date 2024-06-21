@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Card,
@@ -7,8 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useTheme } from "next-themes";
 
 function CustomCard({ number, title, analytic }) {
+  const { theme } = useTheme();
   const formatNumber = (num) => {
     return new Intl.NumberFormat("en-US", {
       style: "decimal",
@@ -22,7 +25,15 @@ function CustomCard({ number, title, analytic }) {
       <CardTitle className=" mb-2">{formatNumber(number)}</CardTitle>
       <div className="flex justify-between">
         <p>{title}</p>
-        {analytic && <div className="bg-[#dbf2f2] p-1">{analytic}</div>}
+        {analytic && (
+          <div
+            className={`${
+              theme === "light" ? "bg-[#dbf2f2]" : "text-[#4ad3d3]"
+            } p-1`}
+          >
+            {analytic}
+          </div>
+        )}
       </div>
     </Card>
   );

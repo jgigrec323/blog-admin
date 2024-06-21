@@ -3,12 +3,14 @@ import Select from "react-select";
 import axios from "axios";
 import { toast } from "sonner";
 import { usePost } from "@/context/PostContext";
+import { useTheme } from "next-themes";
 
 function CustomSelect({ endpoint, placeholder }) {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { post, addCategory, removeCategory, addTag, removeTag } = usePost();
-  //TODO:need to get the categories and tags
+  const { theme } = useTheme();
+
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -69,6 +71,41 @@ function CustomSelect({ endpoint, placeholder }) {
     }
   };
 
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: theme === "dark" ? "#333" : "#fff",
+      color: theme === "dark" ? "#fff" : "#000",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: theme === "dark" ? "#333" : "#fff",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? theme === "dark"
+          ? "#444"
+          : "#ddd"
+        : state.isFocused
+        ? theme === "dark"
+          ? "#555"
+          : "#eee"
+        : theme === "dark"
+        ? "#333"
+        : "#fff",
+      color: theme === "dark" ? "#fff" : "#000",
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: theme === "dark" ? "#fff" : "#000",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: theme === "dark" ? "#bbb" : "#666",
+    }),
+  };
+
   return (
     <Select
       className="w-72"
@@ -82,6 +119,7 @@ function CustomSelect({ endpoint, placeholder }) {
       )}
       onChange={handleSelectionChange}
       placeholder={placeholder}
+      styles={customStyles}
     />
   );
 }

@@ -11,7 +11,9 @@ import axios from "axios";
 import CustomLoader from "@/components/CustomLoader";
 import { CustomAlertDialog } from "@/components/CustomAlertDialog";
 import { MdDelete } from "react-icons/md";
+import { Switch } from "@/components/ui/switch";
 import { useAppContext } from "@/context/AppContext";
+import { ModeToggle } from "@/components/ModeToggle";
 
 function MainPagesLayout({ children }) {
   const currentPath = usePathname();
@@ -111,6 +113,7 @@ function MainPagesLayout({ children }) {
               <Button variant="destructive">Delete all</Button>
             </CustomAlertDialog>
             <Button
+              variant="outline"
               className=" ml-2 bg-black text-white"
               onClick={() => {
                 router.push("/write");
@@ -125,6 +128,7 @@ function MainPagesLayout({ children }) {
         return (
           <>
             <Button
+              variant="outline"
               onClick={() => {
                 clearPost();
                 router.back();
@@ -158,6 +162,7 @@ function MainPagesLayout({ children }) {
           return (
             <>
               <Button
+                variant="outline"
                 onClick={() => {
                   clearPost();
                   router.back();
@@ -181,6 +186,7 @@ function MainPagesLayout({ children }) {
           return (
             <>
               <Button
+                variant="outline"
                 onClick={() => router.back()}
                 className="mr-2 bg-black text-white"
               >
@@ -217,7 +223,9 @@ function MainPagesLayout({ children }) {
   return (
     <div className="">
       {isLoading && <CustomLoader></CustomLoader>}
-      <div className="flex justify-end">{renderButton()}</div>
+      <div className="relative flex justify-end gap-2 items-center">
+        {renderButton()} <ModeToggle></ModeToggle>
+      </div>
       <div>{children}</div>
     </div>
   );

@@ -1,5 +1,22 @@
 /* Write.css */
 
+:root {
+  --quill-bg-light: #fff;
+  --quill-bg-dark: #333;
+  --quill-color-light: #000;
+  --quill-color-dark: #fff;
+}
+
+html.light {
+  --quill-bg: var(--quill-bg-light);
+  --quill-color: var(--quill-color-light);
+}
+
+html.dark {
+  --quill-bg: var(--quill-bg-dark);
+  --quill-color: var(--quill-color-dark);
+}
+
 .ql-container {
   font-size: 1.5rem !important;
 }
