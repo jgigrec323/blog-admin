@@ -155,6 +155,8 @@ function MainPagesLayout({ children }) {
             New Dashboard Item
           </Button>
         );
+      case "/settings":
+        return <></>;
       default:
         if (currentPath.match(/^\/write\/\d+\/edit$/)) {
           const id = parseInt(currentPath.split("/")[2]);

@@ -17,6 +17,7 @@ function Sidebar() {
     { path: "/posts", label: "Posts" },
     { path: "/categories", label: "Categories" },
     { path: "/tags", label: "Tags" },
+    { path: "/settings", label: "Settings" },
   ];
   const classname = theme === "light" ? "text-black" : "text-white";
   return (
