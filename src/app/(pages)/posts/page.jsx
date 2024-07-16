@@ -8,13 +8,14 @@ import { useAppContext } from "@/context/AppContext";
 import { MdModeEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { Select } from "@/components/ui/select";
 import CustomSelectSingle from "@/components/CustomSelectSingle";
 import { Input } from "@/components/ui/input";
 import CustomLoader from "@/components/CustomLoader";
 import Image from "next/image";
 import { CustomAlertDialog } from "@/components/CustomAlertDialog";
 import { useRouter } from "next/navigation";
+import { BsBookmarkStarFill } from "react-icons/bs";
+
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +85,24 @@ function Posts() {
 
   const handleView = (id) => {
     router.push(`/write/${id}/view`);
+  };
+  const handleFeature = async (id) => {
+    try {
+      const response = await axios.put(`/api/featured-posts/${id}`);
+      if (response.status === 200) {
+        notify("Post updated successfully", true);
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.id === id ? { ...post, isFeatured: !post.isFeatured } : post
+          )
+        );
+      } else {
+        notify("Failed to delete post", false);
+      }
+    } catch (error) {
+      console.error("Error updating post:", error);
+      notify("Failed to update post", false);
+    }
   };
 
   const filteredPosts = posts.filter((post) => {
@@ -183,6 +202,11 @@ function Posts() {
           <CustomAlertDialog id={post.id} handleDelete={handleDelete}>
             <MdDelete size={22} className="text-red-500 cursor-pointer" />
           </CustomAlertDialog>
+          <BsBookmarkStarFill
+            size={22}
+            className={`cursor-pointer ${post.isFeatured && "text-yellow-600"}`}
+            onClick={() => handleFeature(post.id)}
+          />
         </div>
       ),
     },

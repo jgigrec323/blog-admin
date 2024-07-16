@@ -15,6 +15,7 @@ function Sidebar() {
   const links = [
     { path: "/", label: "Dashboard" },
     { path: "/posts", label: "Posts" },
+    { path: "/featured", label: "Featured Posts" },
     { path: "/categories", label: "Categories" },
     { path: "/tags", label: "Tags" },
     { path: "/settings", label: "Settings" },

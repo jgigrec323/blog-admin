@@ -1,10 +1,10 @@
-import Sidebar from "@/components/Sidebar";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { AppProvider } from "@/context/AppContext";
 import { PostProvider } from "@/context/PostContext";
 import { ThemeProvider } from "@/context/ThemeProvider";
+import Sidebar from "@/components/Sidebar";
 
 export const metadata = {
   title: "Blog admin",
