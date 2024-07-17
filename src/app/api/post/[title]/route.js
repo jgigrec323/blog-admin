@@ -12,11 +12,6 @@ function transformTitleBack(title) {
 }
 export async function GET(request, { params }) {
   try {
-    /*   const { userId } = getAuth(request);
-
-                  if (!userId) {
-                    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-                  } */
     const { title } = params;
 
     const transformedTitle = transformTitleBack(title);
@@ -44,6 +39,36 @@ export async function GET(request, { params }) {
     return NextResponse.json({ message: "Post fetched successfully!", post });
   } catch (error) {
     console.log("[POST_GET]:", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+export async function POST(request, { params }) {
+  try {
+    const { title } = params;
+
+    const transformedTitle = transformTitleBack(title);
+
+    if (!title) {
+      return NextResponse.json(
+        { message: "title is required" },
+        { status: 400 }
+      );
+    }
+    const post = await prisma.post.findFirst({
+      where: { title: transformedTitle },
+    });
+    const postU = await prisma.post.update({
+      where: { id: post.id },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+
+    return NextResponse.json({ message: "View count incremented", postU });
+  } catch (error) {
+    console.log("[POST_INCREMENT_GET]:", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
