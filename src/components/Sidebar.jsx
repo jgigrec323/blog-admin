@@ -16,6 +16,7 @@ function Sidebar() {
     { path: "/", label: "Dashboard" },
     { path: "/posts", label: "Posts" },
     { path: "/featured", label: "Featured Posts" },
+    { path: "/comments", label: "Comments" },
     { path: "/categories", label: "Categories" },
     { path: "/tags", label: "Tags" },
     { path: "/settings", label: "Settings" },

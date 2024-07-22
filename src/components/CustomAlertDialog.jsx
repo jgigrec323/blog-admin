@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-export function CustomAlertDialog({ id, handleDelete, children }) {
+export function CustomAlertDialog({ id, handleDelete, children, msg }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -19,7 +19,8 @@ export function CustomAlertDialog({ id, handleDelete, children }) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the post
+            This action cannot be undone. This will permanently delete the{" "}
+            {msg ? msg : "post "}
             from the database.
           </AlertDialogDescription>
         </AlertDialogHeader>
