@@ -7,7 +7,7 @@ import { FaRegImage } from "react-icons/fa6";
 import { BiSolidVideos } from "react-icons/bi";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import "../../write.css";
+import "@/styles/write.css";
 import CustomSelect from "@/components/CustomSelect";
 import { usePost } from "@/context/PostContext";
 import ImageUpload from "@/components/ImageUpload";
