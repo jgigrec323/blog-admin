@@ -4,36 +4,37 @@ import React, { useEffect, useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaRegImage } from "react-icons/fa6";
 import { BiSolidVideos } from "react-icons/bi";
-import ReactQuill, { Quill } from "react-quill";
+import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-import "./write.css";
+import "@/styles/write.css";
 import CustomSelect from "@/components/CustomSelect";
 import { usePost } from "@/context/PostContext";
 import ImageUpload from "@/components/ImageUpload";
+
+// Dynamically import ReactQuill to ensure it only loads on the client
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 function Write() {
   const [open, setOpen] = useState(false);
   const [imgOpen, setImgOpen] = useState(false);
   const [value, setValue] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
   const { post, updatePost, setPost } = usePost();
 
   const toolbarOptions = [
-    ["bold", "italic", "underline", "strike"], // toggled buttons
+    ["bold", "italic", "underline", "strike"],
     ["blockquote", "code-block"],
     ["link", "image", "video", "formula"],
-    [{ header: 1 }, { header: 2 }], // custom button values
+    [{ header: 1 }, { header: 2 }],
     [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-    [{ script: "sub" }, { script: "super" }], // superscript/subscript
-    [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-    [{ direction: "rtl" }], // text direction
-    [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+    [{ script: "sub" }, { script: "super" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    [{ direction: "rtl" }],
+    [{ size: ["small", false, "large", "huge"] }],
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ color: [] }, { background: [] }],
     [{ font: [] }],
     [{ align: [] }],
-    ["clean"], // remove formatting button
+    ["clean"],
   ];
 
   const modules = {
@@ -50,6 +51,7 @@ function Write() {
       published: false,
     });
   }, [setPost]);
+
   return (
     <div>
       <div className="mt-10 relative">
@@ -61,20 +63,11 @@ function Write() {
           onChange={(e) => updatePost({ title: e.target.value })}
         />
         <div className="my-5 flex items-center gap-10">
-          <IoIosAddCircleOutline
-            size={30}
-            onClick={() => {
-              setOpen(!open);
-            }}
-          />
+          <IoIosAddCircleOutline size={30} onClick={() => setOpen(!open)} />
           {open && (
             <div className="flex gap-5 items-center">
-              <FaRegImage
-                onClick={() => {
-                  setImgOpen(!imgOpen);
-                }}
-              ></FaRegImage>
-              {imgOpen && <ImageUpload></ImageUpload>}
+              <FaRegImage onClick={() => setImgOpen(!imgOpen)} />
+              {imgOpen && <ImageUpload />}
               <BiSolidVideos size={25} />
             </div>
           )}
@@ -86,14 +79,14 @@ function Write() {
             <CustomSelect endpoint="tag" placeholder="Select tags..." />
           </div>
         </div>
-        <div className="w-full ">
+        <div className="w-full">
           <ReactQuill
             theme="snow"
             value={post.content}
             onChange={(value) => updatePost({ content: value })}
             placeholder="Write something..."
             modules={modules}
-          ></ReactQuill>
+          />
         </div>
       </div>
     </div>
