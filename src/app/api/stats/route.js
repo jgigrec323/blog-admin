@@ -6,10 +6,6 @@ const prisma = new PrismaClient();
 
 export async function GET(request) {
   try {
-    const { userId } = getAuth(request);
-    if (!userId) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
     const totalPosts = await prisma.post.count();
     const totalComments = await prisma.comment.count();
     const totalShares = await prisma.post.aggregate({

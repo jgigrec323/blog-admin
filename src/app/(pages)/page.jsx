@@ -7,9 +7,12 @@ import Title from "@/components/Title";
 import ViewsGraph from "@/components/ViewsGraph";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useAuth, RedirectToSignIn } from "@clerk/nextjs";
 
 function Dashboard() {
+  const { isSignedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const monthlyViews = [10, 20, 30, 25, 35, 50, 45, 60, 70, 90, 100, 120];
 
   const [stats, setStats] = useState({});
@@ -17,96 +20,71 @@ function Dashboard() {
   const [popularPosts, setPopularPosts] = useState([]);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await axios.get("/api/stats");
-        setStats(response.data);
-      } catch (error) {
-        console.error("Error fetching stats:", error);
-      }
-    };
-
-    const fetchRecentPosts = async () => {
-      try {
-        const response = await axios.get("/api/recent-posts");
-        setRecentPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching recent posts:", error);
-      }
-    };
-
-    const fetchPopularPosts = async () => {
-      try {
-        const response = await axios.get("/api/popular-posts");
-        setPopularPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching popular posts:", error);
-      }
-    };
+    if (!isSignedIn) return; // Avoid fetching if the user isn’t authenticated
 
     const fetchData = async () => {
-      await Promise.all([
-        fetchStats(),
-        fetchRecentPosts(),
-        fetchPopularPosts(),
-      ]);
-      setIsLoading(false);
+      try {
+        const [statsResponse, recentResponse, popularResponse] =
+          await Promise.all([
+            axios.get("/api/stats"),
+            axios.get("/api/recent-posts"),
+            axios.get("/api/popular-posts"),
+          ]);
+
+        setStats(statsResponse.data);
+        setRecentPosts(recentResponse.data);
+        setPopularPosts(popularResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchData();
-  }, []);
+  }, [isSignedIn]);
+
+  if (!isSignedIn) {
+    // Redirect to sign-in page if the user is not authenticated
+    return <RedirectToSignIn />;
+  }
+
+  if (isLoading) return <CustomLoader />;
+  if (hasError)
+    return <div>Error loading dashboard data. Please try again.</div>;
 
   const statistiques = [
-    {
-      value: stats.totalViews,
-      title: "Total views",
-      analytic: "+20%",
-    },
-    {
-      value: stats.totalPosts,
-      title: "Total posts",
-      analytic: "",
-    },
-    {
-      value: stats.totalComments,
-      title: "Total comments",
-      analytic: "+20%",
-    },
-    {
-      value: stats.totalShares,
-      title: "Total shares",
-      analytic: "+20%",
-    },
+    { value: stats.totalViews, title: "Total views", analytic: "+20%" },
+    { value: stats.totalPosts, title: "Total posts", analytic: "" },
+    { value: stats.totalComments, title: "Total comments", analytic: "+20%" },
+    { value: stats.totalShares, title: "Total shares", analytic: "+20%" },
   ];
 
   return (
     <div className="relative">
       <Title>Dashboard</Title>
-      {!isLoading ? (
-        <section>
-          <section className="mt-4 grid w-full grid-cols-1 gap-4 gap-x-8 transition-all sm:grid-cols-2 xl:grid-cols-4">
-            {statistiques.map((stat, i) => (
-              <CustomCard
-                key={i}
-                number={stat.value}
-                title={stat.title}
-                analytic={stat.analytic}
-              />
-            ))}
-          </section>
-          <section className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-6 h-[500px]">
-            <div className="sm:col-span-4">
-              <ViewsGraph title={"Monthly Views"} data={monthlyViews} />
-            </div>
-            <div className="sm:col-span-2 flex flex-col justify-between">
-              <RecentPostsCard title={"Recent Posts"} posts={recentPosts} />
-              <PopularPostsCard title={"Popular Posts"} posts={popularPosts} />
-            </div>
-          </section>
+      <section>
+        <section className="mt-4 grid w-full grid-cols-1 gap-4 gap-x-8 transition-all sm:grid-cols-2 xl:grid-cols-4">
+          {statistiques.map((stat, i) => (
+            <CustomCard
+              key={i}
+              number={stat.value}
+              title={stat.title}
+              analytic={stat.analytic}
+            />
+          ))}
         </section>
-      ) : (
-        <CustomLoader />
-      )}
+        <section className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-6 h-[500px]">
+          <div className="sm:col-span-4">
+            <ViewsGraph title={"Monthly Views"} data={monthlyViews} />
+          </div>
+          <div className="sm:col-span-2 flex flex-col justify-between">
+            <RecentPostsCard title={"Recent Posts"} posts={recentPosts} />
+            <PopularPostsCard title={"Popular Posts"} posts={popularPosts} />
+          </div>
+        </section>
+      </section>
     </div>
   );
 }

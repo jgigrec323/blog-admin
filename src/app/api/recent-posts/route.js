@@ -6,11 +6,6 @@ const prisma = new PrismaClient();
 
 export async function GET(request) {
   try {
-    const { userId } = getAuth(request);
-    if (!userId) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
     const recentPosts = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
