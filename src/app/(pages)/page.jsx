@@ -20,8 +20,6 @@ function Dashboard() {
   const [popularPosts, setPopularPosts] = useState([]);
 
   useEffect(() => {
-    if (!isSignedIn) return; // Avoid fetching if the user isn’t authenticated
-
     const fetchData = async () => {
       try {
         const [statsResponse, recentResponse, popularResponse] =
@@ -43,7 +41,7 @@ function Dashboard() {
     };
 
     fetchData();
-  }, [isSignedIn]);
+  }, []);
 
   if (!isSignedIn) {
     // Redirect to sign-in page if the user is not authenticated
@@ -79,7 +77,7 @@ function Dashboard() {
           <div className="sm:col-span-4">
             <ViewsGraph title={"Monthly Views"} data={monthlyViews} />
           </div>
-          <div className="sm:col-span-2 flex flex-col justify-between">
+          <div className="sm:col-span-2 flex flex-col gap-4">
             <RecentPostsCard title={"Recent Posts"} posts={recentPosts} />
             <PopularPostsCard title={"Popular Posts"} posts={popularPosts} />
           </div>
